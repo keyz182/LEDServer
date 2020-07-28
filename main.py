@@ -14,7 +14,7 @@ import board
 import neopixel
 from adafruit_blinka.microcontroller.bcm283x import neopixel as _neopixel
 
-from visualisation import Visualisation, RemoteVisualisation, RainbowVisualisation
+from visualisation import Visualisation, RemoteVisualisation, RainbowVisualisation, AudioVisualisation
 
 # Choose an open pin connected to the Data In of the NeoPixel strip, i.e. board.D18
 # NeoPixels must be connected to D10, D12, D18 or D21 to work.
@@ -49,23 +49,31 @@ class Strip(BaseModel):
 active_vis = None
 
 def swap_vis(vis: type):
+    logger.info("Swap_vis to {}".format(vis.__name__))
     global active_vis
 
     if active_vis:
         if vis == RemoteVisualisation and isinstance(active_vis, RemoteVisualisation):
-            pass
+            logger.info("Vis is already remote, skipping")
         elif not active_vis.is_alive():
-            active_vis = Nones
+            logger.info("Vis not alive, setting to none")
+            active_vis = None
 
-        if not isinstance(active_vis, vis):
+        if active_vis and not isinstance(active_vis, vis):
+            logger.info("New vis type, closing old thread")
             active_vis.stop()
-            active_vis.join()
+            while active_vis.is_alive():
+                logger.info("Thread still alive, joining")
+                active_vis.join(timeout=2.5)
+            logger.info("Done")
             active_vis = None
     
     if not active_vis:
+        logger.info("New Vis")
         active_vis = vis(pixels, num_pixels)
         pixels.fill((0, 0, 0))
         pixels.show()
+        logger.info("Starting new vis")
         active_vis.start()
 
 
@@ -77,6 +85,12 @@ def read_root():
 @app.get("/rainbow/")
 def rainbow():
     swap_vis(RainbowVisualisation)
+
+    return {"status": "ok"}
+
+@app.get("/audio/")
+def audio():
+    swap_vis(AudioVisualisation)
 
     return {"status": "ok"}
 

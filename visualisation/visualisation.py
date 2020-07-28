@@ -22,5 +22,5 @@ class Visualisation(threading.Thread):
     def run(self):
         logger.info("Starting {}".format(self.__class__.__name__))
         self.doTask()
-        logger.info("Finished {}, clearing LEDs".format(self.__class__.__name__))
+        logger.info("Finished {}".format(self.__class__.__name__))
                 
