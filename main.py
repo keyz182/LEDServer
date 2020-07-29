@@ -76,6 +76,7 @@ def swap_vis(vis: type):
         logger.info("Starting new vis")
         active_vis.start()
 
+swap_vis(RainbowVisualisation)
 
 @app.get("/")
 def read_root():
