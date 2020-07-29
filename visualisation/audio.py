@@ -134,33 +134,5 @@ class AudioVisualisation(Visualisation):
         stream.stop_stream()
         logger.info("Closing stream")
         stream.close()
-                
 
-    def old_doTask(self):
-        stream=p.open(format=pyaudio.paInt16,channels=2,rate=RATE,input=True, frames_per_buffer=CHUNK)
-        while self.running:
-            data = stream.read(CHUNK)
-            matrix=self.calculate_levels(data, CHUNK, RATE)
-            for y in range (0,10):
-                for x in range(0, 10):
-                    self.pixels[self.XY(x,y)] = (0,0,0,)
-            #print(matrix.tolist())
-            top = self.getTop(matrix)
-            for x in range(0, 10):
-                end_idx = math.floor(matrix[x])
-                fraction = matrix[x] - end_idx
-                
-                for y in range (0, end_idx):
-                    pixel = hsv_to_intrgb(self.spectrum[y])
-                    self.pixels[self.XY(x,y)] = pixel
-                
-                if end_idx < 9:
-                    colour = list(self.spectrum[y])
-                    colour[2] = fraction
-                    pixel = hsv_to_intrgb(colour)
-                    self.pixels[self.XY(x, end_idx+1)] = pixel
-            self.pixels.show()
-        logger.info("Stopping stream")
-        stream.stop_stream()
-        logger.info("Closing stream")
-        stream.close()
+
