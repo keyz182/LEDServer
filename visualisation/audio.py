@@ -1,4 +1,3 @@
-# Simple test for NeoPixels on Raspberry Pi
 import time
 import neopixel
 from visualisation import Visualisation
