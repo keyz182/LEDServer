@@ -11,7 +11,13 @@ class Visualisation(threading.Thread):
         self.pixels = pixels
         self.num_pixels = num_pixels  
         self.running = True
-        logger.info("{} Initialised".format(self.__class__.__name__))  
+        logger.info("{} Initialised".format(self.__class__.__name__))
+        
+    def XY(self, x, y):
+        if y % 2 == 0:
+            return (y * 10) + x;
+        else:
+            return (y * 10) + (10 - 1) - x
     
     def stop(self):
         self.running = False

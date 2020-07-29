@@ -74,7 +74,8 @@ def swap_vis(vis: type):
         pixels.fill((0, 0, 0))
         pixels.show()
         logger.info("Starting new vis")
-        active_vis.start()
+        if not active_vis.is_alive():
+            active_vis.start()
 
 swap_vis(RainbowVisualisation)
 
@@ -108,8 +109,9 @@ def XY(x, y):
 def set_led(x: int, y: int, led: LED):
     swap_vis(RemoteVisualisation)
     
-    pixels[min(XY(x,y), 99)] = (led.r, led.g, led.b,)
-    pixels.show()
+    global active_vis
+    active_vis.setLED(x,y,(led.r, led.g, led.b,))
+    
     return {"led": led}
 
 

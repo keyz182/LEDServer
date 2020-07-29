@@ -19,7 +19,7 @@ CHUNK = 4096
 
 logger = logging.getLogger(__name__)
 
-scaling = 0.25
+scaling = 1/2
 
 
 p=pyaudio.PyAudio()
@@ -42,12 +42,6 @@ class AudioVisualisation(Visualisation):
         self.weighting = [2,2,8,8,16,16,32,32,64,64]
         self.top = [1,1,1,1,1,1,1,1,1,1]
         self.decay = [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
-        
-    def XY(self, x, y):
-        if y % 2 == 0:
-            return (y * 10) + x;
-        else:
-            return (y * 10) + (10 - 1) - x
 
     def piff(self, val):
         return int(2*CHUNK*val/RATE)
@@ -62,16 +56,18 @@ class AudioVisualisation(Visualisation):
         fourier=np.delete(fourier,len(fourier)-1)
         # Find average 'amplitude' for specific frequency ranges in Hz
         power = np.abs(fourier)   
-        self.matrix[0]= int(np.mean(power[self.piff(0)    :self.piff(31.5):1]))
-        self.matrix[1]= int(np.mean(power[self.piff(31.5)   :self.piff(63):1]))
-        self.matrix[2]= int(np.mean(power[self.piff(63)   :self.piff(125):1]))
-        self.matrix[3]= int(np.mean(power[self.piff(125)  :self.piff(250):1]))
-        self.matrix[4]= int(np.mean(power[self.piff(250)  :self.piff(500):1]))
-        self.matrix[5]= int(np.mean(power[self.piff(500)  :self.piff(1000):1]))
-        self.matrix[6]= int(np.mean(power[self.piff(1000) :self.piff(2000):1]))
-        self.matrix[7]= int(np.mean(power[self.piff(2000) :self.piff(4000):1]))
-        self.matrix[8]= int(np.mean(power[self.piff(4000) :self.piff(8000):1]))
-        self.matrix[9]= int(np.mean(power[self.piff(8000) :self.piff(16000):1]))
+        self.matrix[0]= int(np.mean(power[self.piff(0)    :self.piff(32):1]))
+        self.matrix[1]= int(np.mean(power[self.piff(32)  :self.piff(63):1]))
+        self.matrix[2]= int(np.mean(power[self.piff(63)  :self.piff(95):1]))
+        self.matrix[3]= int(np.mean(power[self.piff(95)  :self.piff(125):1]))
+        self.matrix[4]= int(np.mean(power[self.piff(95)  :self.piff(188):1]))
+        self.matrix[5]= int(np.mean(power[self.piff(188)  :self.piff(250):1]))
+        self.matrix[6]= int(np.mean(power[self.piff(250)  :self.piff(500):1]))
+        self.matrix[7]= int(np.mean(power[self.piff(500) :self.piff(1000):1]))
+        self.matrix[8]= int(np.mean(power[self.piff(1000) :self.piff(2000):1]))
+        self.matrix[9]= int(np.mean(power[self.piff(2000) :self.piff(16000):1]))
+        #self.matrix[8]= int(np.mean(power[self.piff(4000) :self.piff(8000):1]))
+        #self.matrix[9]= int(np.mean(power[self.piff(8000) :self.piff(16000):1]))
         # Tidy up column values for the LED matrix
         self.matrix=np.divide(np.multiply(self.matrix,self.weighting),(1000000*scaling))
         # Set floor at 0 and ceiling at 8 for LED matrix
