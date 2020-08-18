@@ -124,7 +124,7 @@ class AudioVisualisation(Visualisation):
                     colour[2] = fraction
                     self.pixels[self.XY(x, end_idx+1)] = hsv_to_intrgb(colour)
                 
-                self.pixels[self.XY(x,top[x])] = hsv_to_intrgb((0,1,0.64))
+                self.pixels[self.XY(x,top[x])] = hsv_to_intrgb((0,1,0.33))
             self.pixels.show()
         logger.info("Stopping stream")
         stream.stop_stream()
