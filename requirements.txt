@@ -4,7 +4,7 @@ adafruit-circuitpython-neopixel==6.0.0
 adafruit-circuitpython-pypixelbuf==2.1.2
 colorama==0.3.7
 fastapi==0.60.1
-uvicorn==0.11.6
+uvicorn==0.11.7
 structlog==20.1.0
 PyAudio==0.2.11
 neotiles==0.4.0
