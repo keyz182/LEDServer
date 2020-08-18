@@ -15,7 +15,7 @@ class Visualisation(threading.Thread):
         
     def XY(self, x, y):
         if y % 2 == 0:
-            return (y * 10) + x;
+            return (y * 10) + x
         else:
             return (y * 10) + (10 - 1) - x
     
