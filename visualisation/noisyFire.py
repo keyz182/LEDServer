@@ -6,16 +6,13 @@ import random
 from visualisation import Visualisation
 import logging
 from opensimplex import OpenSimplex
-from .utils import millis
+from .utils import millis, scale, scale8, toRGB
 import adafruit_fancyled.adafruit_fancyled as fancy
 
 noise =  OpenSimplex()
 
 logger = logging.getLogger(__name__)
 
-scale = lambda x: int((x+1)*(2**15)) # 2**15 rather than 16 as we're doing +1 to a range of -1 to +1. saves an extra division
-scale8 = lambda i, scale: int(i * (scale / 256))
-toRGB = lambda colour: ((colour.pack() >> 16) & 0xff, (colour.pack() >> 8) & 0xff, colour.pack() & 0xff, )
 logArray2D = lambda A: logger.info('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in A]))
 
 Pal = [

@@ -14,7 +14,7 @@ import board
 import neopixel
 from adafruit_blinka.microcontroller.bcm283x import neopixel as _neopixel
 
-from visualisation import Visualisation, RemoteVisualisation, RainbowVisualisation, AudioVisualisation, FireVisualisation, ColourFireVisualisation, NoiseVisualisation, NoisyFireVisualisation
+from visualisation import Visualisation, RemoteVisualisation, RainbowVisualisation, AudioVisualisation, FireVisualisation, ColourFireVisualisation, NoiseVisualisation, NoisyFireVisualisation, Sinusoid3Visualisation, NoisyColoursVisualisation
 
 # Choose an open pin connected to the Data In of the NeoPixel strip, i.e. board.D18
 # NeoPixels must be connected to D10, D12, D18 or D21 to work.
@@ -79,7 +79,7 @@ def swap_vis(vis: type):
 
 @app.on_event("startup")
 async def startup_event():
-    swap_vis(NoisyFireVisualisation)
+    swap_vis(NoisyColoursVisualisation)
 
 @app.on_event("shutdown")
 def shutdown_event():
@@ -107,6 +107,14 @@ def fire():
     swap_vis(FireVisualisation)
 
     return {"status": "ok"}
+    return {"status": "ok"}
+
+
+@app.get("/noisyfire/")
+def noisyfire():
+    swap_vis(NoisyFireVisualisation)
+
+    return {"status": "ok"}
 
 @app.get("/colourfire/")
 def colourfire():
@@ -117,6 +125,19 @@ def colourfire():
 @app.get("/noise/")
 def noise():
     swap_vis(NoiseVisualisation)
+
+    return {"status": "ok"}
+    return {"status": "ok"}
+
+@app.get("/noisycolours/")
+def noisycolours():
+    swap_vis(NoisyColoursVisualisation)
+
+    return {"status": "ok"}
+
+@app.get("/sinusoid3/")
+def sinusoid3():
+    swap_vis(Sinusoid3Visualisation)
 
     return {"status": "ok"}
 
