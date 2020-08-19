@@ -3,10 +3,13 @@ import time
 import neopixel
 from visualisation import Visualisation
 import logging
+from opensimplex import OpenSimplex
+from .utils import millis
+noise =  OpenSimplex()
 
 logger = logging.getLogger(__name__)
 
-class RainbowVisualisation(Visualisation):
+class NoiseVisualisation(Visualisation):
     def __init__(self, pixels: neopixel.NeoPixel, num_pixels: int):
         super().__init__(pixels, num_pixels)
     
@@ -32,13 +35,15 @@ class RainbowVisualisation(Visualisation):
         return (r, g, b)# if ORDER in (neopixel.RGB, neopixel.GRB) else (r, g, b, 0)
 
 
-    def rainbow_cycle(self, wait=0.001):
-        for j in range(255):
-            for i in range(self.num_pixels):
-                pixel_index = (i * 256 // self.num_pixels) + j
-                self.pixels[i] = self.wheel(pixel_index & 255)
-            self.pixels.show()
-            time.sleep(wait)
+    def rainbow_cycle(self, wait=1/60):
+        for x in range(0, 10):
+            for y in range(0,10):
+                val = noise.noise3d(x,y, millis())
+                val = ((val + 1)/2)*255
+                self.pixels[self.XY(x,y)] = self.wheel(val)
+        
+        self.pixels.show()
+        time.sleep(wait)
 
     def doTask(self):
         while self.running:

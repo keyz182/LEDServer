@@ -91,15 +91,21 @@ class FireMatrix(object):
         self.height = height
         self.data = [0]*(width*height)
 
+    def XY(self, x, y):
+        if y % 2 == 0:
+            return (y * 10) + x
+        else:
+            return (y * 10) + (10 - 1) - x
+            
     def get(self, x, y):
         x %= self.width   # Wrap around when x values go outside the bounds!
         y %= self.height  # Like-wise wrap around y values!
-        return self.data[y * self.width + x]
+        return self.data[self.XY(x, y)]
 
     def set(self, x, y, value):
         x %= self.width
         y %= self.height
-        self.data[y * self.width + x] = value
+        self.data[self.XY(x, y)] = value
 
   
 class FireTile(Tile):
@@ -137,7 +143,8 @@ class FireTile(Tile):
         # a more pleasing result (see the video linked to above).
         concealed_row = self.size.rows if self.base == 'bottom' else -1
         for x in range(self.size.cols):
-            self.fire.set(x, concealed_row, int(random.random() * 255))
+            if random.random() > 11/12:
+                self.fire.set(x, concealed_row, int(random.random() * 255))
 
         if self.base == 'bottom':
             row_list = list(range(self.size.rows))
@@ -169,31 +176,28 @@ class FireVisualisation(Visualisation):
         super().__init__(pixels, num_pixels)
         self.tiles = TileManager(
             CustomNTNeoPixelMatrix(size=MATRIX_SIZE, pixels=pixels),
-            draw_fps=10
+            draw_fps=60
         )
-        size_divisor = 5
-        hue_offset = 0        
 
-        for i in range(5):
-            fire = FireTile(size_divisor=size_divisor, hue_offset=hue_offset, base='top')
-            hue_offset += 50
-            self.tiles.register_tile(fire, size=(2, 10), root=(i*2, 0))
+    def init_tiles(self):
+        size_divisor = 6.5
+        red_fire = FireTile(size_divisor=size_divisor, base='top')
 
-        # red_fire = FireTile(size_divisor=size_divisor, base='top')
+        fire_width = MATRIX_SIZE.cols
+        fire_height = MATRIX_SIZE.rows
 
-        # fire_width = MATRIX_SIZE.cols
-        # fire_height = MATRIX_SIZE.rows
-
-        # self.tiles.register_tile(red_fire, size=(fire_width, fire_height), root=(0, 0))
-
-
+        self.tiles.register_tile(red_fire, size=(fire_width, fire_height), root=(0, 0))
 
     def doTask(self):
+        self.init_tiles()
         self.tiles.draw_hardware_matrix()
         while self.running:
             time.sleep(0.5)
         
+
+        logger.info("Stopping Tiles")
         self.tiles.draw_stop()
+        logger.info("Clearing Matrix")
         self.tiles.clear_hardware_matrix()
         
 
