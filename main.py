@@ -14,7 +14,7 @@ import board
 import neopixel
 from adafruit_blinka.microcontroller.bcm283x import neopixel as _neopixel
 
-from visualisation import Visualisation, RemoteVisualisation, RainbowVisualisation, AudioVisualisation, FireVisualisation, ColourFireVisualisation, NoiseVisualisation, NoisyFireVisualisation, Sinusoid3Visualisation, NoisyColoursVisualisation
+from visualisation import Visualisation, RemoteVisualisation, RainbowVisualisation, AudioVisualisation, FireVisualisation, ColourFireVisualisation, NoiseVisualisation, NoisyFireVisualisation, Sinusoid3Visualisation, NoisyColoursVisualisation, MeatballsVisualisation
 
 # Choose an open pin connected to the Data In of the NeoPixel strip, i.e. board.D18
 # NeoPixels must be connected to D10, D12, D18 or D21 to work.
@@ -79,7 +79,7 @@ def swap_vis(vis: type):
 
 @app.on_event("startup")
 async def startup_event():
-    swap_vis(NoisyColoursVisualisation)
+    swap_vis(NoisyFireVisualisation)
 
 @app.on_event("shutdown")
 def shutdown_event():

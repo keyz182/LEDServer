@@ -7,3 +7,4 @@ from .noise import NoiseVisualisation
 from .noisyFire import NoisyFireVisualisation
 from .sinusoid3 import Sinusoid3Visualisation
 from .noisycolours import NoisyColoursVisualisation
+from .meatballs import MeatballsVisualisation
