@@ -1,0 +1,4 @@
+[DEFAULT]
+hostname=foo.local
+port=8000
+ssl=False
