@@ -26,16 +26,16 @@ class Sinusoid3Visualisation(Visualisation):
 
             for y in range(0, 10):
                 for x in range(0, 10):
-                    cx = y + float(size * (sin (float(speed * 0.003 * float(millis() ))) ) ) - 8  # the 8 centers the middle on a 16x16
-                    cy = x + float(size * (cos (float(speed * 0.0022 * float(millis()))) ) ) - 8
+                    cx = y + float(size * (sin (float(speed * 0.003 * float(millis() ))) ) ) - 5  # the 5 centers the middle on a 16x16
+                    cy = x + float(size * (cos (float(speed * 0.0022 * float(millis()))) ) ) - 5
                     r = int(127 * (1 + sin ( sqrt ( ((cx * cx) + (cy * cy)) ) )))
 
-                    cx = x + float(size * (sin (speed * float(0.0021 * float(millis()))) ) ) - 8
-                    cy = y + float(size * (cos (speed * float(0.002 * float(millis() ))) ) ) - 8
+                    cx = x + float(size * (sin (speed * float(0.0021 * float(millis()))) ) ) - 5
+                    cy = y + float(size * (cos (speed * float(0.002 * float(millis() ))) ) ) - 5
                     g = int(127 * (1 + sin ( sqrt ( ((cx * cx) + (cy * cy)) ) )))
 
-                    cx = x + float(size * (sin (speed * float(0.0041 * float(millis() ))) ) ) - 8
-                    cy = y + float(size * (cos (speed * float(0.0052 * float(millis() ))) ) ) - 8
+                    cx = x + float(size * (sin (speed * float(0.0041 * float(millis() ))) ) ) - 5
+                    cy = y + float(size * (cos (speed * float(0.0052 * float(millis() ))) ) ) - 5
                     b = int(127 * (1 + sin ( sqrt ( ((cx * cx) + (cy * cy)) ) )))
 
                     self.pixels[self.XY(x, y)] = (r, g, b, )

@@ -29,11 +29,11 @@ if __name__ == '__main__':
         svc = None
         https = False
         while svc is None:
-            svc = zeroconf.get_service_info('_https._tcp.local.', 'ledserver._https._tcp.local.')
+            svc = zeroconf.get_service_info('_leds._tcp.local.', 'ledserver._leds._tcp.local.')
             if svc:
                 https = True
                 break
-            svc = zeroconf.get_service_info('_http._tcp.local.', 'ledserver._http._tcp.local.')
+            svc = zeroconf.get_service_info('_led._tcp.local.', 'ledserver._led._tcp.local.')
             time.sleep(1)
         
         logger.info("ledserver found at %s", svc.server)

@@ -61,11 +61,18 @@ def ip4_addresses():
                     ip_list.append(link['addr'])
     return ip_list
 
-desc = {'path': '/'}
+desc = {
+    'id': config['DEFAULT']['hostname'],
+    'model': 'v1',
+    'hw_rev': 'v1',
+    'fw_rev': 'v1',
+    'channels': '1',
+    'path': '/'
+    }
 
 info = ServiceInfo(
-    "_https._tcp.local." if config['DEFAULT']['ssl'] else "_http._tcp.local.",
-    "ledserver._https._tcp.local." if config['DEFAULT']['ssl'] else "ledserver._http._tcp.local.",
+    "_leds._tcp.local." if config['DEFAULT']['ssl'] else "_led._tcp.local.",
+    "ledserver._leds._tcp.local." if config['DEFAULT']['ssl'] else "ledserver._led._tcp.local.",
     addresses=[socket.inet_aton(ip) for ip in ip4_addresses()],
     port=int(config['DEFAULT']['port']),
     properties=desc,
@@ -118,7 +125,8 @@ def swap_vis(vis: type):
 
 @app.on_event("startup")
 async def startup_event():
-    swap_vis(NoisyFireVisualisation)
+    #swap_vis(NoisyFireVisualisation)
+    swap_vis(RemoteVisualisation)
 
 @app.on_event("shutdown")
 def shutdown_event():
@@ -133,7 +141,17 @@ def shutdown_event():
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return str(active_vis.__class__.__name__)
+
+
+@app.get("/stop/")
+def stop():
+    swap_vis(RemoteVisualisation)
+    
+    global active_vis
+    active_vis.setLED(0,0,(0,0,0))
+    
+    return {"status": "ok"}
 
 
 @app.get("/rainbow/")
@@ -147,7 +165,6 @@ def rainbow():
 def fire():
     swap_vis(FireVisualisation)
 
-    return {"status": "ok"}
     return {"status": "ok"}
 
 
