@@ -125,8 +125,8 @@ def swap_vis(vis: type):
 
 @app.on_event("startup")
 async def startup_event():
-    #swap_vis(NoisyFireVisualisation)
-    swap_vis(RemoteVisualisation)
+    swap_vis(Sinusoid3Visualisation)
+    #swap_vis(RemoteVisualisation)
 
 @app.on_event("shutdown")
 def shutdown_event():
@@ -139,10 +139,50 @@ def shutdown_event():
     zeroconf.unregister_service(info)
     zeroconf.close()
 
-@app.get("/")
+from fastapi.responses import PlainTextResponse
+
+@app.get("/", response_class=PlainTextResponse)
 def read_root():
     return str(active_vis.__class__.__name__)
 
+
+from pydantic import BaseModel
+
+
+class Profile(BaseModel):
+    name: str
+
+@app.post("/")
+def set(profile: Profile):
+    print(profile.name)
+    global active_vis
+    if profile.name == 'rainbow':
+        swap_vis(RainbowVisualisation)
+        return {"name": "rainbow"}
+    elif profile.name == 'fire':
+        swap_vis(FireVisualisation)
+        return {"name": "fire"}
+    elif profile.name == 'noisyfire':
+        swap_vis(NoisyFireVisualisation)
+        return {"name": "noisyfire"}
+    elif profile.name == 'colourfire':
+        swap_vis(ColourFireVisualisation)
+        return {"name": "colourfire"}
+    elif profile.name == 'noise':
+        swap_vis(NoiseVisualisation)
+        return {"name": "noise"}
+    elif profile.name == 'noisycolours':
+        swap_vis(NoisyColoursVisualisation)
+        return {"name": "noisycolours"}
+    elif profile.name == 'sinusoid3':
+        swap_vis(Sinusoid3Visualisation)
+        return {"name": "sinusoid3"}
+    elif profile.name == 'off':
+        swap_vis(RemoteVisualisation)
+        active_vis.setLED(0,0,(0,0,0))
+
+
+    return {"name": "off"}
 
 @app.get("/stop/")
 def stop():
@@ -198,11 +238,11 @@ def sinusoid3():
 
     return {"status": "ok"}
 
-@app.get("/audio/")
-def audio():
-    swap_vis(AudioVisualisation)
+# @app.get("/audio/")
+# def audio():
+#     swap_vis(AudioVisualisation)
 
-    return {"status": "ok"}
+#     return {"status": "ok"}
 
 
 def XY(x, y):
