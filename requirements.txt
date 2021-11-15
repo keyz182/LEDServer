@@ -10,4 +10,4 @@ PyAudio==0.2.11
 neotiles==0.4.0
 pyzmq==17.1.2
 netifaces==0.10.9
-websockets==8.1
+websockets==9.1
