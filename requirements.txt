@@ -3,7 +3,7 @@ adafruit-circuitpython-fancyled==1.4.2
 adafruit-circuitpython-neopixel==6.0.0
 adafruit-circuitpython-pypixelbuf==2.1.2
 colorama==0.3.7
-fastapi==0.60.1
+fastapi==0.65.2
 uvicorn==0.11.8
 structlog==20.1.0
 PyAudio==0.2.11
